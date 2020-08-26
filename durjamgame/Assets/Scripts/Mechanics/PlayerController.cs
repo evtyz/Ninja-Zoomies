@@ -53,6 +53,11 @@ namespace Platformer.Mechanics
             spriteRenderer = GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
         }
+        
+        void OnBecameInvisible()
+        {
+            Destroy(gameObject);
+        }
 
         protected override void Update()
         {
