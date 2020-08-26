@@ -56,7 +56,7 @@ MonoBehaviour:
   respawnAudio: {fileID: 8300000, guid: e18959d46b63f3c4c8cc020a433cf848, type: 3}
   ouchAudio: {fileID: 8300000, guid: 6c05149e5a2fba64ba172e25a61074b7, type: 3}
   maxSpeed: 5
-  jumpTakeOffSpeed: 9
+  jumpTakeOffSpeed: 6
   horizontalID: Horizontal
   jumpID: Jump
   jumpState: 0
