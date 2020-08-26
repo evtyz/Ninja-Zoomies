@@ -27,6 +27,9 @@ namespace Platformer.Mechanics
         /// </summary>
         public float jumpTakeOffSpeed = 7;
 
+        public string horizontalID = "Horizontal";
+        public string jumpID = "Jump";
+
         public JumpState jumpState = JumpState.Grounded;
         private bool stopJump;
         /*internal new*/ public Collider2D collider2d;
@@ -55,10 +58,10 @@ namespace Platformer.Mechanics
         {
             if (controlEnabled)
             {
-                move.x = Input.GetAxis("Horizontal");
-                if (jumpState == JumpState.Grounded && Input.GetButtonDown("Jump"))
+                move.x = Input.GetAxis(horizontalID);
+                if (jumpState == JumpState.Grounded && Input.GetButtonDown(jumpID))
                     jumpState = JumpState.PrepareToJump;
-                else if (Input.GetButtonUp("Jump"))
+                else if (Input.GetButtonUp(JumpID))
                 {
                     stopJump = true;
                     Schedule<PlayerStopJump>().player = this;
