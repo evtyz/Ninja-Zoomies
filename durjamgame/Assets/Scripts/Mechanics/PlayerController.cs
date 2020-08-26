@@ -21,11 +21,18 @@ namespace Platformer.Mechanics
         /// <summary>
         /// Max horizontal speed of the player.
         /// </summary>
-        public float maxSpeed = 7;
+        public float maxSpeed = 4;
         /// <summary>
         /// Initial jump velocity at the start of a jump.
         /// </summary>
-        public float jumpTakeOffSpeed = 7;
+        public float jumpTakeOffSpeed = 6;
+
+        private float bonusBaseVelocity = 0;
+
+        public void getToken()
+        {
+            bonusBaseVelocity += 1;
+        }
 
         public string horizontalID = "Horizontal";
         public string jumpID = "Jump";
@@ -36,6 +43,7 @@ namespace Platformer.Mechanics
         /*internal new*/ public AudioSource audioSource;
         public Health health;
         public bool controlEnabled = true;
+        public float energyDecayPerFrame = (float)0.02;
 
         bool jump;
         Vector2 move;
@@ -61,6 +69,16 @@ namespace Platformer.Mechanics
 
         protected override void Update()
         {
+            if (bonusBaseVelocity >= energyDecayPerFrame)
+            {
+                bonusBaseVelocity = bonusBaseVelocity - energyDecayPerFrame;
+            }
+            else
+            {
+                bonusBaseVelocity = 0;
+            }
+
+
             if (controlEnabled)
             {
                 move.x = Input.GetAxis(horizontalID);
@@ -112,9 +130,13 @@ namespace Platformer.Mechanics
 
         protected override void ComputeVelocity()
         {
+            Debug.Log(bonusBaseVelocity);
+            float bonusVelocity = (float)(2 * Mathf.Log(bonusBaseVelocity + 1, 2));
+            Debug.Log(bonusVelocity);
+
             if (jump && IsGrounded)
             {
-                velocity.y = jumpTakeOffSpeed * model.jumpModifier;
+                velocity.y = (jumpTakeOffSpeed + bonusVelocity) * model.jumpModifier;
                 jump = false;
             }
             else if (stopJump)
@@ -132,9 +154,9 @@ namespace Platformer.Mechanics
                 spriteRenderer.flipX = true;
 
             animator.SetBool("grounded", IsGrounded);
-            animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);
+            animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / (maxSpeed + bonusVelocity));
 
-            targetVelocity = move * maxSpeed;
+            targetVelocity = move * (maxSpeed + bonusVelocity);
         }
 
         public enum JumpState
