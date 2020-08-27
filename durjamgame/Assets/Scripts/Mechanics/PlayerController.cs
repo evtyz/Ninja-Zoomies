@@ -28,6 +28,9 @@ public class PlayerController : MonoBehaviour
 	internal Animator animator;
 	readonly PlatformerModel model = Simulation.GetModel<PlatformerModel>();
 
+	private int stunTimeLeft = 0;
+	public int stunTime;
+
 	SpriteRenderer spriteRenderer;
 
     public AudioSource audioSource;
@@ -68,6 +71,11 @@ public class PlayerController : MonoBehaviour
 		Destroy(gameObject);
 	}
 
+	public void stun()
+	{
+		stunTimeLeft = stunTime;
+	}
+
     public void getToken()
     {
 		energy += 1;
@@ -91,6 +99,12 @@ public class PlayerController : MonoBehaviour
 
 	private void FixedUpdate()
 	{
+		if (stunTimeLeft != 0)
+		{
+			stunTimeLeft -= 1;
+		}
+
+
 		if (energy >= energyDecayRate)
 		{
 			energy -= energyDecayRate;
@@ -188,19 +202,28 @@ public class PlayerController : MonoBehaviour
 		{
 			numExtraJumpsLeft = numExtraJumps;
 		}
-
 		animator.SetBool("grounded", m_Grounded);
 		animator.SetFloat("velocityX", Mathf.Abs(horizontalMove));
+
 	}
 
     public void Update()
     {
-        horizontalMove = Input.GetAxisRaw(horizontalAxis) * (runSpeed + (float)bonusForce) * ((float)speedMultiplier);
-
-		if (Input.GetButtonDown(jumpAxis))
+		if (stunTimeLeft == 0)
 		{
-			jump = true;
+			horizontalMove = Input.GetAxisRaw(horizontalAxis) * (runSpeed + (float)bonusForce) * ((float)speedMultiplier);
+
+			if (Input.GetButtonDown(jumpAxis))
+			{
+				jump = true;
+			}
 		}
+		else
+		{
+			horizontalMove = 0;
+			jump = false;
+		}
+
     }
 
 

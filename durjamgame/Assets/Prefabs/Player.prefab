@@ -64,6 +64,7 @@ MonoBehaviour:
   horizontalAxis: 
   jumpAxis: 
   ID: 0
+  stunTime: 100
   audioSource: {fileID: 8509783501685719824}
   runSpeed: 18
   energyDecayRate: 0.005
