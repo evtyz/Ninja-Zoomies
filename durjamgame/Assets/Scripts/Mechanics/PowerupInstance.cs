@@ -54,9 +54,9 @@ namespace Platformer.Mechanics
             if (controller != null)
                 collected = true;
             //send an event into the gameplay system to perform some behaviour.
-            // var ev = Schedule<PlayerPowerupCollision>();
-            // ev.powerup = this;
-            // ev.player = player;
+            var ev = Schedule<PlayerPowerupCollision>();
+            ev.powerup = this;
+            ev.player = player;
         }
     }
 }

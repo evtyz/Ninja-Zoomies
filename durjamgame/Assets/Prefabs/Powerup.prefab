@@ -114,6 +114,6 @@ MonoBehaviour:
   powerupCollectAudio: {fileID: 8300000, guid: bf527d825758e5b4ca7b69f5a02d9a56, type: 3}
   randomAnimationStartTime: 1
   idleAnimation:
-  - {fileID: 0}
+  - {fileID: 21300000, guid: c36b0e54a8d8340759ab2f1394787f1f, type: 3}
   collectedAnimation:
   - {fileID: 0}

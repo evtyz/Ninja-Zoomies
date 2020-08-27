@@ -29,6 +29,12 @@ namespace Platformer.Mechanics
 
         private float bonusBaseVelocity = 0;
 
+        private int numExtraJumps = 0;
+
+        private float speedMultiplier = 1;
+
+        private int powerupFuel = 0;
+
         public void getToken()
         {
             bonusBaseVelocity += 1;
@@ -46,6 +52,7 @@ namespace Platformer.Mechanics
 
         public void getPowerup()
         {
+            powerupFuel = 600;
             int powerupKey = Random.Range(0, 3);
             switch (powerupKey)
             {
@@ -96,6 +103,37 @@ namespace Platformer.Mechanics
 
         protected override void Update()
         {
+            // Default values for powerup stats
+            gravityModifier = 1;
+            numExtraJumps = 0;
+            speedMultiplier = 1;
+            Debug.Log(currentPowerup);
+
+            if (powerupFuel == 0)
+            {
+                currentPowerup = Powerup.None;
+            }
+
+            if (currentPowerup != Powerup.None)
+            {
+                powerupFuel -= 1;
+            }
+
+            // Enable special stats based on possible powerup.
+            switch (currentPowerup)
+            {
+                case Powerup.DoubleJump:
+                    numExtraJumps = 1;
+                    break;
+                case Powerup.Speed:
+                    speedMultiplier = (float)1.4;
+                    break;
+                case Powerup.WeakGravity:
+                    gravityModifier = (float)0.5;
+                    break;
+            }
+
+            // Decay energy
             if (bonusBaseVelocity >= energyDecayPerFrame)
             {
                 bonusBaseVelocity = bonusBaseVelocity - energyDecayPerFrame;
@@ -157,9 +195,7 @@ namespace Platformer.Mechanics
 
         protected override void ComputeVelocity()
         {
-            Debug.Log(bonusBaseVelocity);
             float bonusVelocity = (float)(2 * Mathf.Log(bonusBaseVelocity + 1, 2));
-            Debug.Log(bonusVelocity);
 
             if (jump && IsGrounded)
             {
@@ -183,7 +219,7 @@ namespace Platformer.Mechanics
             animator.SetBool("grounded", IsGrounded);
             animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / (maxSpeed + bonusVelocity));
 
-            targetVelocity = move * (maxSpeed + bonusVelocity);
+            targetVelocity = move * (speedMultiplier * (maxSpeed + bonusVelocity));
         }
 
         public enum JumpState
