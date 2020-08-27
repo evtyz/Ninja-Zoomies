@@ -1,6 +1,9 @@
 using Platformer.Core;
 using Platformer.Model;
 using UnityEngine;
+using Platformer.Mechanics;
+using System;
+using System.Collections.Generic;
 
 namespace Platformer.Mechanics
 {
@@ -20,6 +23,10 @@ namespace Platformer.Mechanics
         //conveniently configured inside the inspector.
         public PlatformerModel model = Simulation.GetModel<PlatformerModel>();
 
+        private bool gameRunning = true;
+
+        public int gameOverThreshold;
+
         void OnEnable()
         {
             Instance = this;
@@ -33,6 +40,34 @@ namespace Platformer.Mechanics
         void Update()
         {
             if (Instance == this) Simulation.Tick();
+
+            if (gameRunning)
+            {
+                GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+                if (players.Length == 1)
+                {
+                    Win(players[0].GetComponent<PlayerController>());
+                }
+                else
+                {
+                    foreach(GameObject player in players)
+                    {
+                        if (player.transform.position.x > gameOverThreshold)
+                        {
+                            Win(player.GetComponent<PlayerController>());
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        void Win(PlayerController player)
+        {
+            // TODO: make game over screen
+            Debug.Log("Player " + player.ID + " wins!");
+            gameRunning = false;
         }
     }
 }
