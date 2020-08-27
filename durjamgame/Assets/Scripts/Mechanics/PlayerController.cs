@@ -107,7 +107,6 @@ public class PlayerController : MonoBehaviour
 		if (powerupFuel != 0)
 		{
 			powerupFuel -= 1;
-			Debug.Log(powerupFuel);
 		}
 		else
 		{
@@ -130,8 +129,6 @@ public class PlayerController : MonoBehaviour
 		m_Rigidbody2D.gravityScale = (float)gravityModifier;
 
 		bonusForce = 2 * Mathf.Log((float)energy + 1, 2);
-
-		Debug.Log(bonusForce);
 
 		m_Grounded = false;
 
@@ -198,8 +195,6 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
-		Debug.Log(powerup);
-
         horizontalMove = Input.GetAxisRaw(horizontalAxis) * (runSpeed + (float)bonusForce) * ((float)speedMultiplier);
 
 		if (Input.GetButtonDown(jumpAxis))
