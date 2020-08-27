@@ -6,244 +6,217 @@ using static Platformer.Core.Simulation;
 using Platformer.Model;
 using Platformer.Core;
 
-namespace Platformer.Mechanics
+public class PlayerController : MonoBehaviour
 {
-    /// <summary>
-    /// This is the main class used to implement control of the player.
-    /// It is a superset of the AnimationController class, but is inlined to allow for any kind of customisation.
-    /// </summary>
-    public class PlayerController : KinematicObject
+	[SerializeField] private float m_JumpForce = 400f;							// Amount of force added when the player jumps.
+	[Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;	// How much to smooth out the movement
+	[SerializeField] private bool m_AirControl = false;							// Whether or not a player can steer while jumping;
+	[SerializeField] private LayerMask m_WhatIsGround;							// A mask determining what is ground to the character
+	[SerializeField] private Transform m_GroundCheck;							// A position marking where to check if the player is grounded.
+
+	const float k_GroundedRadius = .1f; // Radius of the overlap circle to determine if grounded
+	private bool m_Grounded;            // Whether or not the player is grounded.
+	private Rigidbody2D m_Rigidbody2D;
+	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
+	private Vector3 velocity = Vector3.zero;
+    public AudioClip jumpAudio;
+    public AudioClip respawnAudio;
+    public AudioClip ouchAudio;
+    public string horizontalAxis;
+    public string jumpAxis;
+	public int ID;
+	internal Animator animator;
+	readonly PlatformerModel model = Simulation.GetModel<PlatformerModel>();
+
+	SpriteRenderer spriteRenderer;
+
+    public AudioSource audioSource;
+
+    public float runSpeed = 40f;
+
+	float horizontalMove = 0f;
+	bool jump = false;
+
+	private double energy = 0;
+	public double energyDecayRate;
+	private double bonusForce = 0;
+	private int powerupFuel;
+	public int powerupDuration;
+
+	private double gravityModifier = 1;
+	private int numExtraJumps = 0;
+	private double speedMultiplier = 1;
+
+	private int numExtraJumpsLeft = 0;
+
+	public double lowGravityPowerupFactor = 0.5;
+	public double speedPowerupFactor = 1.5;
+	public int extraJumpsPowerupFactor = 1;
+
+	private enum Powerup
+	{
+		None,
+		LowGravity,
+		ExtraSpeed,
+		DoubleJump
+	}
+
+	private Powerup powerup = Powerup.None;
+
+	void OnBecameInvisible()
+	{
+		Destroy(gameObject);
+	}
+
+    public void getToken()
     {
-        public AudioClip jumpAudio;
-        public AudioClip respawnAudio;
-        public AudioClip ouchAudio;
-
-        /// <summary>
-        /// Max horizontal speed of the player.
-        /// </summary>
-        public float maxSpeed = 4;
-        /// <summary>
-        /// Initial jump velocity at the start of a jump.
-        /// </summary>
-        public float jumpTakeOffSpeed = 6;
-
-        private float bonusBaseVelocity = 0;
-
-        private int numExtraJumps = 0;
-
-        private int jumpsAvailable = 0;
-
-        private float speedMultiplier = 1;
-
-        private int powerupFuel = 0;
-
-        public void getToken()
-        {
-            bonusBaseVelocity += 1;
-        }
-
-        public enum Powerup
-        {
-            None,
-            DoubleJump,
-            Speed,
-            WeakGravity
-        }
-
-        private Powerup currentPowerup = Powerup.None;
-
-        public void getPowerup()
-        {
-            powerupFuel = 2000;
-            int powerupKey = Random.Range(0, 3);
-            switch (powerupKey)
-            {
-                case 0:
-                    currentPowerup = Powerup.DoubleJump;
-                    break;
-                case 1:
-                    currentPowerup = Powerup.Speed;
-                    break;
-                case 2:
-                    currentPowerup = Powerup.WeakGravity;
-                    break;
-            }
-        }
-
-        public string horizontalID = "Horizontal";
-        public string jumpID = "Jump";
-
-        public JumpState jumpState = JumpState.Grounded;
-        private bool stopJump;
-        /*internal new*/ public Collider2D collider2d;
-        /*internal new*/ public AudioSource audioSource;
-        public Health health;
-        public bool controlEnabled = true;
-        public float energyDecayPerFrame = (float)0.02;
-
-        bool jump;
-        Vector2 move;
-        SpriteRenderer spriteRenderer;
-        internal Animator animator;
-        readonly PlatformerModel model = Simulation.GetModel<PlatformerModel>();
-
-        public Bounds Bounds => collider2d.bounds;
-
-        void Awake()
-        {
-            health = GetComponent<Health>();
-            audioSource = GetComponent<AudioSource>();
-            collider2d = GetComponent<Collider2D>();
-            spriteRenderer = GetComponent<SpriteRenderer>();
-            animator = GetComponent<Animator>();
-        }
-        
-        void OnBecameInvisible()
-        {
-            Destroy(gameObject);
-        }
-
-        protected override void Update()
-        {
-            // Default values for powerup stats
-            gravityModifier = 1;
-            numExtraJumps = 0;
-            speedMultiplier = 1;
-            Debug.Log(currentPowerup);
-
-            if (powerupFuel == 0)
-            {
-                currentPowerup = Powerup.None;
-            }
-
-            if (currentPowerup != Powerup.None)
-            {
-                powerupFuel -= 1;
-            }
-
-            // Enable special stats based on possible powerup.
-            switch (currentPowerup)
-            {
-                case Powerup.DoubleJump:
-                    numExtraJumps = 1;
-                    break;
-                case Powerup.Speed:
-                    speedMultiplier = (float)1.4;
-                    break;
-                case Powerup.WeakGravity:
-                    gravityModifier = (float)0.5;
-                    break;
-            }
-
-            // Decay energy
-            if (bonusBaseVelocity >= energyDecayPerFrame)
-            {
-                bonusBaseVelocity = bonusBaseVelocity - energyDecayPerFrame;
-            }
-            else
-            {
-                bonusBaseVelocity = 0;
-            }
-
-            Debug.Log(numExtraJumps);
-            Debug.Log(jumpsAvailable);
-
-            if (controlEnabled)
-            {
-                move.x = Input.GetAxis(horizontalID);
-                if (Input.GetButtonDown(jumpID))
-                {
-                    if (jumpState == JumpState.Grounded)
-                    {
-                        jumpState = JumpState.PrepareToJump;
-                        jumpsAvailable = numExtraJumps;
-                    }
-                    else if (jumpsAvailable != 0)
-                    {
-                        jumpsAvailable -= 1;
-                        jumpState = JumpState.PrepareToJump;
-                    }
-                }
-                else if (Input.GetButtonUp(jumpID))
-                {
-                    stopJump = true;
-                    Schedule<PlayerStopJump>().player = this;
-                }
-            }
-            else
-            {
-                move.x = 0;
-            }
-            UpdateJumpState();
-            base.Update();
-        }
-
-        void UpdateJumpState()
-        {
-            jump = false;
-            switch (jumpState)
-            {
-                case JumpState.PrepareToJump:
-                    jumpState = JumpState.Jumping;
-                    jump = true;
-                    stopJump = false;
-                    break;
-                case JumpState.Jumping:
-                    if (!IsGrounded)
-                    {
-                        Schedule<PlayerJumped>().player = this;
-                        jumpState = JumpState.InFlight;
-                    }
-                    break;
-                case JumpState.InFlight:
-                    if (IsGrounded)
-                    {
-                        Schedule<PlayerLanded>().player = this;
-                        jumpState = JumpState.Landed;
-                    }
-                    break;
-                case JumpState.Landed:
-                    jumpState = JumpState.Grounded;
-                    break;
-            }
-        }
-
-        protected override void ComputeVelocity()
-        {
-            float bonusVelocity = (float)(2 * Mathf.Log(bonusBaseVelocity + 1, 2));
-
-            if (jump)
-            {
-                velocity.y = (jumpTakeOffSpeed + bonusVelocity) * model.jumpModifier;
-                jump = false;
-            }
-            else if (stopJump)
-            {
-                stopJump = false;
-                if (velocity.y > 0)
-                {
-                    velocity.y = velocity.y * model.jumpDeceleration;
-                }
-            }
-
-            if (move.x > 0.01f)
-                spriteRenderer.flipX = false;
-            else if (move.x < -0.01f)
-                spriteRenderer.flipX = true;
-
-            animator.SetBool("grounded", IsGrounded);
-            animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / (maxSpeed + bonusVelocity));
-
-            targetVelocity = move * (speedMultiplier * (maxSpeed + bonusVelocity));
-        }
-
-        public enum JumpState
-        {
-            Grounded,
-            PrepareToJump,
-            Jumping,
-            InFlight,
-            Landed
-        }
+		energy += 1;
     }
+
+    public void getPowerup()
+    {
+		int powerupKey = Random.Range(1, System.Enum.GetNames(typeof(Powerup)).Length);
+		powerup = (Powerup)powerupKey;
+		powerupFuel = powerupDuration;
+    }
+
+	private void Awake()
+	{
+		m_Rigidbody2D = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
+		spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
+	}
+
+
+	private void FixedUpdate()
+	{
+		if (energy >= energyDecayRate)
+		{
+			energy -= energyDecayRate;
+		}
+		else
+		{
+			energy = 0;
+		}
+
+		gravityModifier = 1;
+		numExtraJumps = 0;
+		speedMultiplier = 1;
+
+		if (powerupFuel != 0)
+		{
+			powerupFuel -= 1;
+			Debug.Log(powerupFuel);
+		}
+		else
+		{
+			powerup = Powerup.None;
+		}
+
+		switch (powerup)
+		{
+			case Powerup.DoubleJump:
+				numExtraJumps = extraJumpsPowerupFactor;
+				break;
+			case Powerup.ExtraSpeed:
+				speedMultiplier = speedPowerupFactor;
+				break;
+			case Powerup.LowGravity:
+				gravityModifier = lowGravityPowerupFactor;
+				break;
+		}
+
+		m_Rigidbody2D.gravityScale = (float)gravityModifier;
+
+		bonusForce = 2 * Mathf.Log((float)energy + 1, 2);
+
+		Debug.Log(bonusForce);
+
+		m_Grounded = false;
+
+		// The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
+		// This can be done using layers instead but Sample Assets will not overwrite your project settings.
+		Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
+		for (int i = 0; i < colliders.Length; i++)
+		{
+			if (colliders[i].gameObject != gameObject)
+				m_Grounded = true;
+		}
+
+		animator.SetBool("grounded", m_Grounded);
+        
+        Move(horizontalMove * Time.fixedDeltaTime, jump);
+		jump = false;
+	}
+
+
+	public void Move(float move, bool jump)
+	{
+		//only control the player if grounded or airControl is turned on
+		if (m_Grounded || m_AirControl)
+		{
+			// Move the character by finding the target velocity
+			Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
+			// And then smoothing it out and applying it to the character
+			m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref velocity, m_MovementSmoothing);
+
+			// If the input is moving the player right and the player is facing left...
+			if (move > 0 && !m_FacingRight)
+			{
+				// ... flip the player.
+				Flip();
+			}
+			// Otherwise if the input is moving the player left and the player is facing right...
+			else if (move < 0 && m_FacingRight)
+			{
+				// ... flip the player.
+				Flip();
+			}
+		}
+		// If the player should jump...
+		if ((m_Grounded || numExtraJumpsLeft != 0) && jump)
+		{
+			if ((!m_Grounded) && numExtraJumpsLeft != 0)
+			{
+				numExtraJumpsLeft -= 1;
+			}
+		
+			// Add a vertical force to the player.
+			m_Grounded = false;
+			m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce + (float)bonusForce * 10));
+		}
+
+		if (m_Grounded)
+		{
+			numExtraJumpsLeft = numExtraJumps;
+		}
+
+		animator.SetBool("grounded", m_Grounded);
+		animator.SetFloat("velocityX", Mathf.Abs(horizontalMove));
+	}
+
+    public void Update()
+    {
+		Debug.Log(powerup);
+
+        horizontalMove = Input.GetAxisRaw(horizontalAxis) * (runSpeed + (float)bonusForce) * ((float)speedMultiplier);
+
+		if (Input.GetButtonDown(jumpAxis))
+		{
+			jump = true;
+		}
+    }
+
+
+	private void Flip()
+	{
+		// Switch the way the player is labelled as facing.
+		m_FacingRight = !m_FacingRight;
+
+		// Flip x axis of local scale for transform
+		Vector3 theScale = transform.localScale;
+		theScale.x *= -1;
+		transform.localScale = theScale;
+	}
 }
