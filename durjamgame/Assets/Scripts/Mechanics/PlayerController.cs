@@ -31,6 +31,8 @@ namespace Platformer.Mechanics
 
         private int numExtraJumps = 0;
 
+        private int jumpsAvailable = 0;
+
         private float speedMultiplier = 1;
 
         private int powerupFuel = 0;
@@ -52,7 +54,7 @@ namespace Platformer.Mechanics
 
         public void getPowerup()
         {
-            powerupFuel = 600;
+            powerupFuel = 2000;
             int powerupKey = Random.Range(0, 3);
             switch (powerupKey)
             {
@@ -143,12 +145,25 @@ namespace Platformer.Mechanics
                 bonusBaseVelocity = 0;
             }
 
+            Debug.Log(numExtraJumps);
+            Debug.Log(jumpsAvailable);
 
             if (controlEnabled)
             {
                 move.x = Input.GetAxis(horizontalID);
-                if (jumpState == JumpState.Grounded && Input.GetButtonDown(jumpID))
-                    jumpState = JumpState.PrepareToJump;
+                if (Input.GetButtonDown(jumpID))
+                {
+                    if (jumpState == JumpState.Grounded)
+                    {
+                        jumpState = JumpState.PrepareToJump;
+                        jumpsAvailable = numExtraJumps;
+                    }
+                    else if (jumpsAvailable != 0)
+                    {
+                        jumpsAvailable -= 1;
+                        jumpState = JumpState.PrepareToJump;
+                    }
+                }
                 else if (Input.GetButtonUp(jumpID))
                 {
                     stopJump = true;
@@ -197,7 +212,7 @@ namespace Platformer.Mechanics
         {
             float bonusVelocity = (float)(2 * Mathf.Log(bonusBaseVelocity + 1, 2));
 
-            if (jump && IsGrounded)
+            if (jump)
             {
                 velocity.y = (jumpTakeOffSpeed + bonusVelocity) * model.jumpModifier;
                 jump = false;
