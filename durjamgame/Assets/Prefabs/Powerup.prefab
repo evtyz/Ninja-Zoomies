@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7633853997690529897}
   - component: {fileID: 7633853997690529896}
   - component: {fileID: 7633853997690529899}
-  - component: {fileID: 7633853997690529898}
+  - component: {fileID: 7381274398717946961}
   m_Layer: 0
   m_Name: Powerup
   m_TagString: Untagged
@@ -99,7 +99,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.22265625
---- !u!114 &7633853997690529898
+--- !u!114 &7381274398717946961
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -108,32 +108,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7633853997690529813}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92e2dcc1fb4364cdf887c66f39f76f82, type: 3}
+  m_Script: {fileID: 11500000, guid: 57a70bfae899fc545887fe55e54407ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tokenCollectAudio: {fileID: 8300000, guid: bf527d825758e5b4ca7b69f5a02d9a56, type: 3}
+  powerupCollectAudio: {fileID: 8300000, guid: bf527d825758e5b4ca7b69f5a02d9a56, type: 3}
   randomAnimationStartTime: 1
   idleAnimation:
-  - {fileID: 21300000, guid: c36b0e54a8d8340759ab2f1394787f1f, type: 3}
-  - {fileID: 21300002, guid: c36b0e54a8d8340759ab2f1394787f1f, type: 3}
-  - {fileID: 21300004, guid: c36b0e54a8d8340759ab2f1394787f1f, type: 3}
-  - {fileID: 21300006, guid: c36b0e54a8d8340759ab2f1394787f1f, type: 3}
-  - {fileID: 21300008, guid: c36b0e54a8d8340759ab2f1394787f1f, type: 3}
-  - {fileID: 21300010, guid: c36b0e54a8d8340759ab2f1394787f1f, type: 3}
-  - {fileID: 21300012, guid: c36b0e54a8d8340759ab2f1394787f1f, type: 3}
-  - {fileID: 21300014, guid: c36b0e54a8d8340759ab2f1394787f1f, type: 3}
-  - {fileID: 21300016, guid: c36b0e54a8d8340759ab2f1394787f1f, type: 3}
-  - {fileID: 21300018, guid: c36b0e54a8d8340759ab2f1394787f1f, type: 3}
-  - {fileID: 21300020, guid: c36b0e54a8d8340759ab2f1394787f1f, type: 3}
-  - {fileID: 21300022, guid: c36b0e54a8d8340759ab2f1394787f1f, type: 3}
-  - {fileID: 21300024, guid: c36b0e54a8d8340759ab2f1394787f1f, type: 3}
+  - {fileID: 0}
   collectedAnimation:
-  - {fileID: 21300000, guid: d7f3ba40c95624407a79329e1af8b953, type: 3}
-  - {fileID: 21300002, guid: d7f3ba40c95624407a79329e1af8b953, type: 3}
-  - {fileID: 21300004, guid: d7f3ba40c95624407a79329e1af8b953, type: 3}
-  - {fileID: 21300006, guid: d7f3ba40c95624407a79329e1af8b953, type: 3}
-  - {fileID: 21300008, guid: d7f3ba40c95624407a79329e1af8b953, type: 3}
-  - {fileID: 21300010, guid: d7f3ba40c95624407a79329e1af8b953, type: 3}
-  - {fileID: 21300012, guid: d7f3ba40c95624407a79329e1af8b953, type: 3}
-  - {fileID: 21300014, guid: d7f3ba40c95624407a79329e1af8b953, type: 3}
-  - {fileID: 21300016, guid: d7f3ba40c95624407a79329e1af8b953, type: 3}
+  - {fileID: 0}

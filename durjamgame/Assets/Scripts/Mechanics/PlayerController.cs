@@ -34,6 +34,33 @@ namespace Platformer.Mechanics
             bonusBaseVelocity += 1;
         }
 
+        public enum Powerup
+        {
+            None,
+            DoubleJump,
+            Speed,
+            WeakGravity
+        }
+
+        private Powerup currentPowerup = Powerup.None;
+
+        public void getPowerup()
+        {
+            int powerupKey = Random.Range(0, 3);
+            switch (powerupKey)
+            {
+                case 0:
+                    currentPowerup = Powerup.DoubleJump;
+                    break;
+                case 1:
+                    currentPowerup = Powerup.Speed;
+                    break;
+                case 2:
+                    currentPowerup = Powerup.WeakGravity;
+                    break;
+            }
+        }
+
         public string horizontalID = "Horizontal";
         public string jumpID = "Jump";
 
