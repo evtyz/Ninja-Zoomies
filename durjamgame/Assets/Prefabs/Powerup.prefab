@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 7633853997690529813}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 11.943549, y: -0.015464544, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -114,6 +114,22 @@ MonoBehaviour:
   powerupCollectAudio: {fileID: 8300000, guid: bf527d825758e5b4ca7b69f5a02d9a56, type: 3}
   randomAnimationStartTime: 1
   idleAnimation:
-  - {fileID: 21300000, guid: c36b0e54a8d8340759ab2f1394787f1f, type: 3}
+  - {fileID: 21300000, guid: b4aecde7a7491b94d948081cd153e7af, type: 3}
+  - {fileID: 21300000, guid: b4aecde7a7491b94d948081cd153e7af, type: 3}
+  - {fileID: 21300000, guid: b4aecde7a7491b94d948081cd153e7af, type: 3}
+  - {fileID: 21300000, guid: 90b41851788ce604981a9f11bb9df3c4, type: 3}
+  - {fileID: 21300000, guid: c5a1099c59e29604a88a3c3f2986433b, type: 3}
+  - {fileID: 21300000, guid: 92903ee851a48834885d433d9ae0e817, type: 3}
+  - {fileID: 21300000, guid: b4aecde7a7491b94d948081cd153e7af, type: 3}
+  - {fileID: 21300000, guid: b4aecde7a7491b94d948081cd153e7af, type: 3}
+  - {fileID: 21300000, guid: b4aecde7a7491b94d948081cd153e7af, type: 3}
+  - {fileID: 21300000, guid: 90b41851788ce604981a9f11bb9df3c4, type: 3}
+  - {fileID: 21300000, guid: 6a7a2c6bfe5471c43b22c99c8550c403, type: 3}
+  - {fileID: 21300000, guid: b4aecde7a7491b94d948081cd153e7af, type: 3}
+  - {fileID: 21300000, guid: b4aecde7a7491b94d948081cd153e7af, type: 3}
   collectedAnimation:
-  - {fileID: 0}
+  - {fileID: 21300000, guid: b2ce54504303b39418d6952623743d84, type: 3}
+  - {fileID: 21300000, guid: 44234d24a6c328b409cc22fc6d1a8545, type: 3}
+  - {fileID: 21300000, guid: cf2c589ae12bac04085b1d76ad38b2c1, type: 3}
+  - {fileID: 21300000, guid: 812025fb81edb8c49bbedf31c185d058, type: 3}
+  - {fileID: 21300000, guid: 3d16ad9e295a9cf48b0fc0f53f9bac59, type: 3}
