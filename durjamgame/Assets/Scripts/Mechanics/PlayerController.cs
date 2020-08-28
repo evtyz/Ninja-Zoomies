@@ -28,6 +28,15 @@ public class PlayerController : MonoBehaviour
 	internal Animator animator;
 	readonly PlatformerModel model = Simulation.GetModel<PlatformerModel>();
 
+	private float distanceBehindCamera = 0;
+	private Transform _camera;
+
+	private const float MIN_DISTANCE_BEHIND_CAMERA = (float)-1.244;
+	private const float MAX_DISTANCE_BEHIND_CAMERA = (float)13f;
+	private float catchupSpeed = 0;
+
+	public float catchupFactor = 5;
+
 	private int stunTimeLeft = 0;
 	public int stunTime;
 
@@ -90,6 +99,7 @@ public class PlayerController : MonoBehaviour
 
 	private void Awake()
 	{
+		_camera = Camera.main.transform;
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
 		spriteRenderer = GetComponent<SpriteRenderer>();
@@ -99,6 +109,7 @@ public class PlayerController : MonoBehaviour
 
 	private void FixedUpdate()
 	{
+
 		if (stunTimeLeft != 0)
 		{
 			stunTimeLeft -= 1;
@@ -210,9 +221,12 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
+		distanceBehindCamera = _camera.position.x - transform.position.x;
+		catchupSpeed = catchupFactor * (distanceBehindCamera - MIN_DISTANCE_BEHIND_CAMERA) / (MAX_DISTANCE_BEHIND_CAMERA - MIN_DISTANCE_BEHIND_CAMERA);
+
 		if (stunTimeLeft == 0)
 		{
-			horizontalMove = Input.GetAxisRaw(horizontalAxis) * (runSpeed + (float)bonusForce) * ((float)speedMultiplier);
+			horizontalMove = Input.GetAxisRaw(horizontalAxis) * (runSpeed + (float)bonusForce + (float)catchupSpeed) * ((float)speedMultiplier);
 
 			if (Input.GetButtonDown(jumpAxis))
 			{

@@ -64,6 +64,7 @@ MonoBehaviour:
   horizontalAxis: 
   jumpAxis: 
   ID: 0
+  catchupFactor: 6
   stunTime: 100
   audioSource: {fileID: 8509783501685719824}
   runSpeed: 18
