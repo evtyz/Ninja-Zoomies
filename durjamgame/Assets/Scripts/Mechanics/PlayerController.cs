@@ -37,8 +37,8 @@ public class PlayerController : MonoBehaviour
 
 	public float catchupFactor = 5;
 
-	private int stunTimeLeft = 0;
-	public int stunTime;
+	private double stunTimeLeft = 0;
+	public double stunTime;
 
 	SpriteRenderer spriteRenderer;
 
@@ -52,8 +52,8 @@ public class PlayerController : MonoBehaviour
 	private double energy = 0;
 	public double energyDecayRate;
 	private double bonusForce = 0;
-	private int powerupFuel;
-	public int powerupDuration;
+	private double powerupDurationLeft;
+	public double powerupDuration;
 
 	private double gravityModifier = 1;
 	private int numExtraJumps = 0;
@@ -94,7 +94,7 @@ public class PlayerController : MonoBehaviour
     {
 		int powerupKey = Random.Range(1, System.Enum.GetNames(typeof(Powerup)).Length);
 		powerup = (Powerup)powerupKey;
-		powerupFuel = powerupDuration;
+		powerupDurationLeft = powerupDuration;
     }
 
 	private void Awake()
@@ -109,51 +109,6 @@ public class PlayerController : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-
-		if (stunTimeLeft != 0)
-		{
-			stunTimeLeft -= 1;
-		}
-
-
-		if (energy >= energyDecayRate)
-		{
-			energy -= energyDecayRate;
-		}
-		else
-		{
-			energy = 0;
-		}
-
-		gravityModifier = 1;
-		numExtraJumps = 0;
-		speedMultiplier = 1;
-
-		if (powerupFuel != 0)
-		{
-			powerupFuel -= 1;
-		}
-		else
-		{
-			powerup = Powerup.None;
-		}
-
-		switch (powerup)
-		{
-			case Powerup.DoubleJump:
-				numExtraJumps = extraJumpsPowerupFactor;
-				break;
-			case Powerup.ExtraSpeed:
-				speedMultiplier = speedPowerupFactor;
-				break;
-			case Powerup.LowGravity:
-				gravityModifier = lowGravityPowerupFactor;
-				break;
-		}
-
-		m_Rigidbody2D.gravityScale = (float)gravityModifier;
-
-		bonusForce = 2 * Mathf.Log((float)energy + 1, 2);
 
 		m_Grounded = false;
 
@@ -221,6 +176,59 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
+
+		
+		if (stunTimeLeft > 0)
+		{
+			stunTimeLeft -= Time.deltaTime;
+		}
+		if (stunTimeLeft < 0)
+		{
+			stunTimeLeft = 0;
+		}
+
+
+		if (energy > 0)
+		{
+			energy -= energyDecayRate * Time.deltaTime;
+		}
+
+		if (energy < 0)
+		{
+			energy = 0;
+		}
+
+		if (powerupDurationLeft > 0)
+		{
+			powerupDurationLeft -= Time.deltaTime;
+		}
+		if (powerupDurationLeft <= 0)
+		{
+			powerup = Powerup.None;
+			powerupDurationLeft = 0;
+		}
+
+		gravityModifier = 1;
+		numExtraJumps = 0;
+		speedMultiplier = 1;
+
+		switch (powerup)
+		{
+			case Powerup.DoubleJump:
+				numExtraJumps = extraJumpsPowerupFactor;
+				break;
+			case Powerup.ExtraSpeed:
+				speedMultiplier = speedPowerupFactor;
+				break;
+			case Powerup.LowGravity:
+				gravityModifier = lowGravityPowerupFactor;
+				break;
+		}
+
+		m_Rigidbody2D.gravityScale = (float)gravityModifier;
+
+		bonusForce = 2 * Mathf.Log((float)energy + 1, 2);
+
 		distanceBehindCamera = _camera.position.x - transform.position.x;
 		catchupSpeed = catchupFactor * (distanceBehindCamera - MIN_DISTANCE_BEHIND_CAMERA) / (MAX_DISTANCE_BEHIND_CAMERA - MIN_DISTANCE_BEHIND_CAMERA);
 
