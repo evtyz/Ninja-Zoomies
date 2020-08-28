@@ -65,11 +65,11 @@ MonoBehaviour:
   jumpAxis: 
   ID: 0
   catchupFactor: 6
-  stunTime: 100
+  stunTime: 2
   audioSource: {fileID: 8509783501685719824}
   runSpeed: 18
-  energyDecayRate: 0.005
-  powerupDuration: 1000
+  energyDecayRate: 0.25
+  powerupDuration: 15
   lowGravityPowerupFactor: 0.8
   speedPowerupFactor: 1.2
   extraJumpsPowerupFactor: 1
