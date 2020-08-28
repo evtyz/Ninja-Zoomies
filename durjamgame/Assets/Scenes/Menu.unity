@@ -155,7 +155,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 18.992126, y: 85}
+  m_AnchoredPosition: {x: 18.983, y: 159}
   m_SizeDelta: {x: 254.6803, y: 49.03778}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &116515143
@@ -177,7 +177,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: OPTIONS
+  m_text: SETTINGS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fcbc0f87dc9704a639254e0715092514, type: 2}
   m_sharedMaterial: {fileID: -8623463526013320719, guid: fcbc0f87dc9704a639254e0715092514,
@@ -552,7 +552,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: -5, y: 0}
+  m_AnchoredPosition: {x: 5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &285365925
@@ -568,7 +568,7 @@ GameObject:
   - component: {fileID: 285365928}
   - component: {fileID: 285365927}
   m_Layer: 5
-  m_Name: OptionsButton
+  m_Name: SettingsButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1234,7 +1234,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1312,7 +1312,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0088498, y: -25}
+  m_AnchoredPosition: {x: -0.0088498, y: -109}
   m_SizeDelta: {x: 292.66455, y: 22.876953}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &717303299
@@ -1357,7 +1357,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1226901515}
   m_FillRect: {fileID: 669493442}
   m_HandleRect: {fileID: 1226901514}
-  m_Direction: 0
+  m_Direction: 1
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
@@ -1792,7 +1792,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1849,7 +1849,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1240647928
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2015,7 +2015,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: OPTIONS
+  m_text: SETTINGS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fcbc0f87dc9704a639254e0715092514, type: 2}
   m_sharedMaterial: {fileID: -8623463526013320719, guid: fcbc0f87dc9704a639254e0715092514,
@@ -2588,12 +2588,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1753652905}
   m_Layer: 5
-  m_Name: OptionsMenu
+  m_Name: SettingsMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1753652905
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2613,8 +2613,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -65}
-  m_SizeDelta: {x: 360, y: 270}
+  m_AnchoredPosition: {x: 0.3, y: -3.9279}
+  m_SizeDelta: {x: 798.51587, y: 411.8559}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1807595463
 GameObject:
@@ -2650,7 +2650,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -87, y: 42}
+  m_AnchoredPosition: {x: 0, y: 35.957}
   m_SizeDelta: {x: -137.89825, y: 26.16082}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1807595465
@@ -2786,7 +2786,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0088501, y: -91}
+  m_AnchoredPosition: {x: -0.000000002794, y: -143}
   m_SizeDelta: {x: 92.91229, y: 47.037773}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2038602137
