@@ -212,8 +212,6 @@ public class PlayerController : MonoBehaviour
 		numExtraJumps = 0;
 		speedMultiplier = 1;
 
-		Debug.Log(energy);
-
 		switch (powerup)
 		{
 			case Powerup.DoubleJump:
