@@ -28,6 +28,7 @@ public class StunnerInstance : MonoBehaviour
 
         void ToggleActivated()
         {
+            // Debug.Log(activated);
             activated = !activated;
             // Handle activation logic here.
             // Debug.Log(activated);
@@ -48,6 +49,8 @@ public class StunnerInstance : MonoBehaviour
 
         void Update()
         {
+            // Debug.Log(currentTime);
+            // Debug.Log(lastCycle);
             currentTime += Time.deltaTime;
             if (currentTime > lastCycle + cycleDuration)
             {
@@ -64,8 +67,18 @@ public class StunnerInstance : MonoBehaviour
                 var player = other.gameObject.GetComponent<PlayerController>();
                 if (player != null) OnPlayerEnter(player);
             }
-
         }
+
+        void OnTriggerStay2D(Collider2D other)
+        {
+            if (activated)
+            {
+                //only exectue OnPlayerEnter if the player collides with this stunconsume.
+                var player = other.gameObject.GetComponent<PlayerController>();
+                if (player != null) OnPlayerEnter(player);
+            }
+        }
+
         void OnPlayerEnter(PlayerController player)
         {
             //disable the gameObject and remove it from the controller update list.
