@@ -228,6 +228,7 @@ public class PlayerController : MonoBehaviour
 		if (powerupDurationLeft <= 0)
 		{
 			powerup = Powerup.None;
+			overlay.setPowerup(0);
 			powerupDurationLeft = 0;
 		}
 
