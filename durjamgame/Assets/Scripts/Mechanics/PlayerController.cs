@@ -39,6 +39,8 @@ public class PlayerController : MonoBehaviour
 
 	private double stunTimeLeft = 0;
 	public double stunTime;
+	private double timeSinceLastStun;
+	public double stunInvulnerabilityDuration;
 
 	SpriteRenderer spriteRenderer;
 
@@ -82,7 +84,13 @@ public class PlayerController : MonoBehaviour
 
 	public void stun()
 	{
+		if (timeSinceLastStun < stunInvulnerabilityDuration + stunTime)
+		{
+			return;
+		}
+
 		stunTimeLeft = stunTime;
+		timeSinceLastStun = 0;
 	}
 
     public void getToken()
@@ -99,6 +107,7 @@ public class PlayerController : MonoBehaviour
 
 	private void Awake()
 	{
+		timeSinceLastStun = stunInvulnerabilityDuration;
 		_camera = Camera.main.transform;
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
@@ -176,8 +185,8 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
+		timeSinceLastStun += Time.deltaTime;
 
-		
 		if (stunTimeLeft > 0)
 		{
 			stunTimeLeft -= Time.deltaTime;

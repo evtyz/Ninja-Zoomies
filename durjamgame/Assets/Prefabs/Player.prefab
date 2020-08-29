@@ -66,6 +66,7 @@ MonoBehaviour:
   ID: 0
   catchupFactor: 6
   stunTime: 2
+  stunInvulnerabilityDuration: 1
   audioSource: {fileID: 8509783501685719824}
   runSpeed: 18
   energyDecayRate: 0.25
