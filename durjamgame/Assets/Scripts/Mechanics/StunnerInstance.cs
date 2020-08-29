@@ -13,6 +13,7 @@ public class StunnerInstance : MonoBehaviour
         internal Sprite[] sprites = new Sprite[0];
 
         internal SpriteRenderer _renderer;
+        internal Animator animator;
 
         //active frame in animation, updated by the controller.
         internal int frame = 0;
@@ -29,11 +30,14 @@ public class StunnerInstance : MonoBehaviour
         {
             activated = !activated;
             // Handle activation logic here.
-            Debug.Log(activated);
+            // Debug.Log(activated);
+            animator.SetBool("activated", activated);
+
         }
 
         void Awake()
         {
+            animator = GetComponent<Animator>();
             _renderer = GetComponent<SpriteRenderer>();
             if (randomAnimationStartTime)
                 frame = Random.Range(0, sprites.Length);
