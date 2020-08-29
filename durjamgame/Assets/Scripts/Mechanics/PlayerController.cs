@@ -90,6 +90,11 @@ public class PlayerController : MonoBehaviour
 			return;
 		}
 
+		if (stunTimeLeft < stunTime && stunTimeLeft != 0)
+		{
+			return;
+		}
+
 		animator.SetBool("stunned", true);
 		stunTimeLeft = stunTime;
 		timeSinceLastStun = 0;
