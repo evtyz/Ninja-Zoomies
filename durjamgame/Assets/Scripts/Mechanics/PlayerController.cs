@@ -56,6 +56,7 @@ public class PlayerController : MonoBehaviour
 	private double bonusForce = 0;
 	private double powerupDurationLeft;
 	public double powerupDuration;
+	public double energyStrength;
 
 	private double gravityModifier = 1;
 	private int numExtraJumps = 0;
@@ -238,7 +239,7 @@ public class PlayerController : MonoBehaviour
 
 		m_Rigidbody2D.gravityScale = (float)gravityModifier;
 
-		bonusForce = 2 * Mathf.Log((float)energy + 1, 2);
+		bonusForce = energyStrength * Mathf.Log((float)energy + 1, 2);
 
 		distanceBehindCamera = _camera.position.x - transform.position.x;
 		catchupSpeed = catchupFactor * (distanceBehindCamera - MIN_DISTANCE_BEHIND_CAMERA) / (MAX_DISTANCE_BEHIND_CAMERA - MIN_DISTANCE_BEHIND_CAMERA);
