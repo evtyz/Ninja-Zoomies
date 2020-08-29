@@ -17,21 +17,51 @@ public class StunnerInstance : MonoBehaviour
         //active frame in animation, updated by the controller.
         internal int frame = 0;
 
+        public float cycleDelay;
+        public float cycleDuration;
+        private float currentTime;
+        private float lastCycle;
+
+
+        private bool activated = false;
+
+        void ToggleActivated()
+        {
+            activated = !activated;
+            // Handle activation logic here.
+            Debug.Log(activated);
+        }
+
         void Awake()
         {
             _renderer = GetComponent<SpriteRenderer>();
             if (randomAnimationStartTime)
                 frame = Random.Range(0, sprites.Length);
             sprites = idleAnimation;
+            currentTime = -cycleDelay;
+            lastCycle = -cycleDuration;
+        }
+
+        void Update()
+        {
+            currentTime += Time.deltaTime;
+            if (currentTime > lastCycle + cycleDuration)
+            {
+                lastCycle += cycleDuration;
+                ToggleActivated();
+            }
         }
 
         void OnTriggerEnter2D(Collider2D other)
         {
-            //only exectue OnPlayerEnter if the player collides with this stunconsume.
-            var player = other.gameObject.GetComponent<PlayerController>();
-            if (player != null) OnPlayerEnter(player);
-        }
+            if (activated)
+            {
+                //only exectue OnPlayerEnter if the player collides with this stunconsume.
+                var player = other.gameObject.GetComponent<PlayerController>();
+                if (player != null) OnPlayerEnter(player);
+            }
 
+        }
         void OnPlayerEnter(PlayerController player)
         {
             //disable the gameObject and remove it from the controller update list.
