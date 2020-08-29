@@ -5,6 +5,7 @@ using Platformer.Gameplay;
 using static Platformer.Core.Simulation;
 using Platformer.Model;
 using Platformer.Core;
+using Platformer.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -27,6 +28,8 @@ public class PlayerController : MonoBehaviour
 	public int ID;
 	internal Animator animator;
 	readonly PlatformerModel model = Simulation.GetModel<PlatformerModel>();
+
+	public OverlayController overlay;
 
 	private float distanceBehindCamera = 0;
 	private Transform _camera;
@@ -80,6 +83,7 @@ public class PlayerController : MonoBehaviour
 
 	void OnBecameInvisible()
 	{
+		overlay.kill();
 		Destroy(gameObject);
 	}
 
@@ -110,6 +114,7 @@ public class PlayerController : MonoBehaviour
     {
 		int powerupKey = Random.Range(1, System.Enum.GetNames(typeof(Powerup)).Length);
 		powerup = (Powerup)powerupKey;
+		overlay.setPowerup(powerupKey);
 		powerupDurationLeft = powerupDuration;
     }
 
