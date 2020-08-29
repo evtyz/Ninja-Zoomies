@@ -69,9 +69,9 @@ MonoBehaviour:
   stunInvulnerabilityDuration: 1
   audioSource: {fileID: 8509783501685719824}
   runSpeed: 15
-  energyDecayRate: 0.4
+  energyDecayRate: 1.2
   powerupDuration: 15
-  energyStrength: 1.5
+  energyStrength: 5
   lowGravityPowerupFactor: 0.7
   speedPowerupFactor: 1.25
   extraJumpsPowerupFactor: 1
