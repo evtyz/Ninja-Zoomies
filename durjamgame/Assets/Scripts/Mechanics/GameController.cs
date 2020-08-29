@@ -4,18 +4,19 @@ using UnityEngine;
 using Platformer.Mechanics;
 using System;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 namespace Platformer.Mechanics
 {
     /// <summary>
     /// This class exposes the the game model in the inspector, and ticks the
     /// simulation.
-    /// </summary> 
+    /// </summary>
     public class GameController : MonoBehaviour
     {
         public static GameController Instance { get; private set; }
 
-        //This model field is public and can be therefore be modified in the 
+        //This model field is public and can be therefore be modified in the
         //inspector.
         //The reference actually comes from the InstanceRegister, and is shared
         //through the simulation and events. Unity will deserialize over this
@@ -26,6 +27,7 @@ namespace Platformer.Mechanics
         private bool gameRunning = true;
 
         public int gameOverThreshold;
+        public static int winningPlayer = 1;
 
         void OnEnable()
         {
@@ -62,12 +64,12 @@ namespace Platformer.Mechanics
                 }
             }
         }
-
         void Win(PlayerController player)
         {
-            // TODO: make game over screen
             Debug.Log("Player " + player.ID + " wins!");
             gameRunning = false;
+            winningPlayer = player.ID;
+            SceneManager.LoadScene (SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
 }
