@@ -89,6 +89,7 @@ public class PlayerController : MonoBehaviour
 			return;
 		}
 
+		animator.SetBool("stunned", true);
 		stunTimeLeft = stunTime;
 		timeSinceLastStun = 0;
 	}
@@ -193,6 +194,7 @@ public class PlayerController : MonoBehaviour
 		}
 		if (stunTimeLeft < 0)
 		{
+			animator.SetBool("stunned", false);
 			stunTimeLeft = 0;
 		}
 
