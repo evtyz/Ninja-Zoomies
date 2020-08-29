@@ -68,12 +68,12 @@ MonoBehaviour:
   stunTime: 2
   stunInvulnerabilityDuration: 1
   audioSource: {fileID: 8509783501685719824}
-  runSpeed: 18
-  energyDecayRate: 0.3
+  runSpeed: 15
+  energyDecayRate: 0.4
   powerupDuration: 15
   energyStrength: 1.5
-  lowGravityPowerupFactor: 0.8
-  speedPowerupFactor: 1.2
+  lowGravityPowerupFactor: 0.7
+  speedPowerupFactor: 1.25
   extraJumpsPowerupFactor: 1
 --- !u!212 &212064061491315838
 SpriteRenderer:

@@ -98,6 +98,7 @@ public class PlayerController : MonoBehaviour
 		animator.SetBool("stunned", true);
 		stunTimeLeft = stunTime;
 		timeSinceLastStun = 0;
+		energy = 0;
 	}
 
     public void getToken()
