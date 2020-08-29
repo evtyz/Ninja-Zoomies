@@ -127,3 +127,5 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 2c770ab2ac73b5a4abec3a9d6b016e44, type: 3}
   collectedAnimation:
   - {fileID: 21300000, guid: 2c770ab2ac73b5a4abec3a9d6b016e44, type: 3}
+  cycleDelay: 1
+  cycleDuration: 2
