@@ -1,9 +1,13 @@
 # Ninja-Zoomies
-##### Race to the end and try to beat the other players! If you fall out of the screen, you are eliminated!
+### Race to the end and try to beat the other players! If you fall out of the screen, you are eliminated!
 Made by Kristy Lau, Varshaa Maxwell, Erin Lee, and Evan Zheng.
+
 Built with Unity and C# with original sprites and animations.
 
+![screenshot](https://raw.githubusercontent.com/richmondvan/Ninja-Zoomies/master/screenshot.png)
+
 Published: https://connect.unity.com/mg/2d/untitled-16550
+
 Devpost: https://devpost.com/software/ninja-zoomies-durjam-hackathon-game
 
 ## Inspiration
