@@ -1,8 +1,11 @@
-# Ninja-Zoomies
+# Ninja Zoomies
 ### Race to the end and try to beat the other players! If you fall out of the screen, you are eliminated!
+
 Made by Kristy Lau, Varshaa Maxwell, Erin Lee, and Evan Zheng.
 
 Built with Unity and C# with original sprites and animations.
+
+Ninja Zoomies was created for DurJam 2020 and won first place.
 
 ![screenshot](https://raw.githubusercontent.com/richmondvan/Ninja-Zoomies/master/screenshot.png)
 
