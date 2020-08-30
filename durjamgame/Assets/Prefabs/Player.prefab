@@ -67,11 +67,11 @@ MonoBehaviour:
   jumpAxis: 
   ID: 0
   overlay: {fileID: 0}
-  catchupFactor: 6
+  catchupFactor: 8
   stunTime: 2
   stunInvulnerabilityDuration: 1
   audioSource: {fileID: 8509783501685719824}
-  runSpeed: 15
+  runSpeed: 17
   energyDecayRate: 1.2
   powerupDuration: 15
   energyStrength: 5
