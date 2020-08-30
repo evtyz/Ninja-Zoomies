@@ -11,6 +11,8 @@ Ninja Zoomies was created for DurJam 2020 and won first place.
 
 Published: https://connect.unity.com/mg/2d/untitled-16550
 
+Video Demo: https://youtu.be/-DTPI1vvEeI
+
 Devpost: https://devpost.com/software/ninja-zoomies-durjam-hackathon-game
 
 ## Inspiration
