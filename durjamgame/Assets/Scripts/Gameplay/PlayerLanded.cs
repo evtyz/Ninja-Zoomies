@@ -13,7 +13,8 @@ namespace Platformer.Gameplay
 
         public override void Execute()
         {
-
+            if (player.audioSource && player.landAudio)
+                player.audioSource.PlayOneShot(player.landAudio);
         }
     }
 }

@@ -12,7 +12,6 @@ public class GameOverMenu : MonoBehaviour {
 
    public void QuitGame ()
    {
-     Debug.Log("QUIT");
      Application.Quit();
    }
 
@@ -20,7 +19,6 @@ public class GameOverMenu : MonoBehaviour {
 
    public void Awake()
    {
-    Debug.Log("Awake");
     gameObjects = new GameObject[] {GameObject.Find("Player1EndScreen"), GameObject.Find("Player2EndScreen"), GameObject.Find("Player3EndScreen"), GameObject.Find("Player4EndScreen")};
    }
 
@@ -29,7 +27,6 @@ public class GameOverMenu : MonoBehaviour {
     //gameObjects = new GameObject[] {GameObject.Find("Player1EndScreen"), GameObject.Find("Player2EndScreen"), GameObject.Find("Player3EndScreen"), GameObject.Find("Player4EndScreen")};
     foreach (var gameObject in gameObjects)
     {
-      Debug.Log ("game object thing");
       gameObject.SetActive(false);
     }
     gameObjects[GameController.winningPlayer - 1].SetActive(true);

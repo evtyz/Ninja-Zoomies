@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57a70bfae899fc545887fe55e54407ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerupCollectAudio: {fileID: 8300000, guid: bf527d825758e5b4ca7b69f5a02d9a56, type: 3}
+  powerupCollectAudio: {fileID: 8300000, guid: d0071715d48b1514184e922f759a69ee, type: 3}
   randomAnimationStartTime: 1
   idleAnimation:
   - {fileID: 21300000, guid: b4aecde7a7491b94d948081cd153e7af, type: 3}

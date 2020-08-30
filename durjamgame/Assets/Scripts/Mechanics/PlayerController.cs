@@ -7,6 +7,7 @@ using Platformer.Model;
 using Platformer.Core;
 using Platformer.UI;
 
+
 public class PlayerController : MonoBehaviour
 {
 	[SerializeField] private float m_JumpForce = 400f;							// Amount of force added when the player jumps.
@@ -20,11 +21,14 @@ public class PlayerController : MonoBehaviour
 	private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 	private Vector3 velocity = Vector3.zero;
-    public AudioClip jumpAudio;
-    public AudioClip respawnAudio;
-    public AudioClip ouchAudio;
-    public string horizontalAxis;
-    public string jumpAxis;
+	public AudioClip jumpAudio;
+	public AudioClip landAudio;
+	public AudioClip walkLeftAudio;
+	public AudioClip walkRightAudio;
+	public AudioClip zapAudio;
+
+	public string horizontalAxis;
+	public string jumpAxis;
 	public int ID;
 	internal Animator animator;
 	readonly PlatformerModel model = Simulation.GetModel<PlatformerModel>();
@@ -40,6 +44,8 @@ public class PlayerController : MonoBehaviour
 
 	public float catchupFactor = 5;
 
+	private bool mute;
+
 	private double stunTimeLeft = 0;
 	public double stunTime;
 	private double timeSinceLastStun;
@@ -47,9 +53,9 @@ public class PlayerController : MonoBehaviour
 
 	SpriteRenderer spriteRenderer;
 
-    public AudioSource audioSource;
+	public AudioSource audioSource;
 
-    public float runSpeed = 40f;
+	public float runSpeed = 40f;
 
 	float horizontalMove = 0f;
 	bool jump = false;
@@ -71,6 +77,15 @@ public class PlayerController : MonoBehaviour
 	public double speedPowerupFactor = 1.5;
 	public int extraJumpsPowerupFactor = 1;
 
+	private enum CurrentlyPlayingWalk
+	{
+		None,
+		Left,
+		Right
+	}
+
+	private CurrentlyPlayingWalk currentWalkNoise = CurrentlyPlayingWalk.None;
+
 	private enum Powerup
 	{
 		None,
@@ -83,54 +98,61 @@ public class PlayerController : MonoBehaviour
 
 	void OnBecameInvisible()
 	{
-		overlay.kill();
+		if (overlay != null)
+		{
+			overlay.kill();
+		}
+
 		Destroy(gameObject);
 	}
 
-	public void stun()
+	public bool stun()
 	{
 		if (timeSinceLastStun < stunInvulnerabilityDuration + stunTime)
 		{
-			return;
+			return false;
 		}
 
 		if (stunTimeLeft < stunTime && stunTimeLeft != 0)
 		{
-			return;
+			return false;
 		}
 
 		animator.SetBool("stunned", true);
 		stunTimeLeft = stunTime;
 		timeSinceLastStun = 0;
 		energy = 0;
+		return true;
 	}
 
-    public void getToken()
-    {
+	public void getToken()
+	{
 		energy += 1;
-    }
+	}
 
-    public void getPowerup()
-    {
+	public void getPowerup()
+	{
 		int powerupKey = Random.Range(1, System.Enum.GetNames(typeof(Powerup)).Length);
 		powerup = (Powerup)powerupKey;
 		overlay.setPowerup(powerupKey);
 		powerupDurationLeft = powerupDuration;
-    }
+	}
 
 	private void Awake()
 	{
 		timeSinceLastStun = stunInvulnerabilityDuration;
 		_camera = Camera.main.transform;
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
-        audioSource = GetComponent<AudioSource>();
+		audioSource = GetComponent<AudioSource>();
 		spriteRenderer = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();
+		animator = GetComponent<Animator>();
+		mute = true;
 	}
 
 
 	private void FixedUpdate()
 	{
+		bool previousGrounded = m_Grounded;
 
 		m_Grounded = false;
 
@@ -140,12 +162,22 @@ public class PlayerController : MonoBehaviour
 		for (int i = 0; i < colliders.Length; i++)
 		{
 			if (colliders[i].gameObject != gameObject)
+			{
 				m_Grounded = true;
+				if (!previousGrounded)
+				{
+					if (m_Rigidbody2D.velocity.y <= 0 && !mute)
+					{
+						var ev = Schedule<PlayerLanded>();
+						ev.player = this;
+					}
+				}
+			}
 		}
 
 		animator.SetBool("grounded", m_Grounded);
-        
-        Move(horizontalMove * Time.fixedDeltaTime, jump);
+		
+		Move(horizontalMove * Time.fixedDeltaTime, jump);
 		jump = false;
 	}
 
@@ -159,6 +191,29 @@ public class PlayerController : MonoBehaviour
 			Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
 			// And then smoothing it out and applying it to the character
 			m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref velocity, m_MovementSmoothing);
+
+			if (m_Grounded)
+			{
+				if (move > 0 && currentWalkNoise != CurrentlyPlayingWalk.Right)
+				{
+					var ev = Schedule<PlayerMoveRight>();
+					ev.player = this;
+					currentWalkNoise = CurrentlyPlayingWalk.Right;
+				}
+				if (move < 0 && currentWalkNoise != CurrentlyPlayingWalk.Left)
+				{
+					var ev = Schedule<PlayerMoveLeft>();
+					ev.player = this;
+					currentWalkNoise = CurrentlyPlayingWalk.Left;
+				}
+			}
+
+			if ((!m_Grounded || move == 0) && !(currentWalkNoise == CurrentlyPlayingWalk.None))
+			{
+				currentWalkNoise = CurrentlyPlayingWalk.None;
+				audioSource.clip = null;
+				audioSource.Play();
+			}
 
 			// If the input is moving the player right and the player is facing left...
 			if (move > 0 && !m_FacingRight)
@@ -185,6 +240,8 @@ public class PlayerController : MonoBehaviour
 			m_Grounded = false;
 			m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, 0);
 			m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce + (float)bonusForce * 10));
+			var ev = Schedule<PlayerJumped>();
+			ev.player = this;
 		}
 
 		if (m_Grounded)
@@ -196,8 +253,8 @@ public class PlayerController : MonoBehaviour
 
 	}
 
-    public void Update()
-    {
+	public void Update()
+	{
 		timeSinceLastStun += Time.deltaTime;
 
 		if (stunTimeLeft > 0)
@@ -260,8 +317,14 @@ public class PlayerController : MonoBehaviour
 		{
 			horizontalMove = Input.GetAxisRaw(horizontalAxis) * (runSpeed + (float)bonusForce + (float)catchupSpeed) * ((float)speedMultiplier);
 
+			if (horizontalMove != 0)
+			{
+				mute = false;
+			}
+
 			if (Input.GetButtonDown(jumpAxis))
 			{
+				mute = false;
 				jump = true;
 			}
 		}
@@ -271,7 +334,7 @@ public class PlayerController : MonoBehaviour
 			jump = false;
 		}
 
-    }
+	}
 
 
 	private void Flip()
